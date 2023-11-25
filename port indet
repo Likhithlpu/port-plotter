@@ -1,0 +1,57 @@
+import socket
+from tabulate import tabulate
+
+def check_port(target, port, kill=False):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)
+    try:
+        sock.connect((target, port))
+        if kill:
+            sock.shutdown(socket.SHUT_RDWR)
+        return port, 'Open', kill
+    except socket.error:
+        return port, 'Closed or Unreachable'
+    finally:
+        sock.close()
+
+def scan_ports(target, start_port, end_port):
+    open_ports = []
+    for port in range(start_port, end_port + 1):
+        result = check_port(target, port)
+        open_ports.append(result)
+    return open_ports
+
+if __name__== "__main__":
+    target_host = input("Enter target IP address or hostname: ")
+    option = input("Enter 'S' to scan a range of ports or 'C' to check a single port: ")
+
+    if option.upper() == 'S':
+        start = int(input("Enter start port number: "))
+        end = int(input("Enter end port number: "))
+
+        print(f"Scanning ports on {target_host}...")
+        results = scan_ports(target_host, start, end)
+
+        if results:
+            table = tabulate(results, headers=['Port', 'Status'], tablefmt='grid')
+            print("\nOpen ports:\n")
+            print(table)
+        else:
+            print("No open ports found.")
+    
+    elif option.upper() == 'C':
+        target_port = int(input("Enter port number to check: "))
+        kill_option = input("Enter 'K' to kill the port (if open): ")
+        if kill_option.upper() == 'K':
+            print(f"Killing port {target_port} on {target_host}...")
+            result = check_port(target_host, target_port, kill=True)
+        else:
+            print(f"Checking port {target_port} on {target_host}...")
+            result = check_port(target_host, target_port)
+
+        print(f"Port {result[0]} is {result[1]} on {target_host}.")
+        if result[2]:
+            print(f"Port {result[0]} has been killed.")
+
+    else:
+        print("Invalid option. Please enter 'S' or 'C'.")

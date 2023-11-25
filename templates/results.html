@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Scanner Results</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+
+</head>
+<body>
+    <h1>Port Scanner Results</h1>
+    <p>Target Host: {{ target_host }}</p>
+    
+    {% if result_table %}
+        <p>Open ports:</p>
+        {{ result_table | safe }}
+    {% elif message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <p>{{ result }}</p>
+    {% endif %}
+</body>
+</html>

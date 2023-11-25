@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Scanner</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Port Scanner</h1>
+    </header>
+
+    <main>
+        <form method="post" action="/">
+            <label for="target_host">Target Host:</label>
+            <input type="text" id="target_host" name="target_host" required><br><br>
+
+            <label for="option">Choose an option:</label>
+            <select id="option" name="option" required>
+                <option value="S">Scan Ports</option>
+                <option value="C">Check Single Port</option>
+            </select><br><br>
+
+            <div id="scan-ports" class="option">
+                <label for="start_port">Start Port:</label>
+                <input type="number" id="start_port" name="start_port" min="1" required><br><br>
+
+                <label for="end_port">End Port:</label>
+                <input type="number" id="end_port" name="end_port" min="1" required><br><br>
+            </div>
+
+            <div id="check-port" class="option">
+                <label for="target_port">Port Number:</label>
+                <input type="number" id="target_port" name="target_port" min="1" required><br><br>
+
+                <label for="kill_option">Kill Port (if open):</label>
+                <select id="kill_option" name="kill_option" required>
+                    <option value="K">Yes</option>
+                    <option value="N">No</option>
+                </select><br><br>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+
+    <script>
+        document.getElementById('option').addEventListener('change', function () {
+            var scanPorts = document.getElementById('scan-ports');
+            var checkPort = document.getElementById('check-port');
+
+            if (this.value == 'S') {
+                scanPorts.style.display = 'block';
+                checkPort.style.display = 'none';
+            } else if (this.value == 'C') {
+                scanPorts.style.display = 'none';
+                checkPort.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>
